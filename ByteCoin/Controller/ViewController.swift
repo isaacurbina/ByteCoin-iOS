@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
 
-	private let coinManager = CoinManager()
+	private var coinManager = CoinManager()
 	
 	// MARK: - Outlets
 	@IBOutlet weak var bitcoinLabel: UILabel!
@@ -20,6 +20,7 @@ class ViewController: UIViewController {
 	// MARK: - UIViewController
 	override func viewDidLoad() {
         super.viewDidLoad()
+		coinManager.delegate = self
 		currencyPicker.dataSource = self
 		currencyPicker.delegate = self
     }
@@ -48,5 +49,17 @@ extension ViewController : UIPickerViewDelegate {
 		let currency = coinManager.currencyArray[row]
 		currencyLabel.text = currency
 		coinManager.getCoinPrice(for: currency)
+	}
+}
+
+// MARK: - CoinManagerDelegate
+extension ViewController : CoinManagerDelegate {
+	
+	func didGetResponse(_ response: CoinApiResponse) {
+		print(response)
+	}
+	
+	func didFailWithError(_ error: any Error) {
+		print(error)
 	}
 }
